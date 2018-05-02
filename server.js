@@ -1,4 +1,6 @@
 const express = require('express')
+const cors = require('cors')
+const morgan = require('morgan')
 const { Model } = require('objection')
 const ejs = require('ejs')
 const bodyParser = require('body-parser')
@@ -25,6 +27,12 @@ app.use(bodyParser.json())
 
 // Setup static files
 app.use(express.static(`${__dirname}/public`))
+
+// para que los demas developers se puedan conectar a esta API (localhost)
+app.use(cors())
+
+// para hacer un log de las peticiones que se realizan
+app.use(morgan('tiny'))
 
 app.use('/', pageRouter)
 app.use('/api', apiRouter)
