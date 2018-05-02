@@ -3,6 +3,17 @@ const Quote = require('../models/Quote')
 
 const apiRouter = Router()
 
+function isUserAuthenticated(req, res, next) {
+  if (req.user) {
+    next()
+  }
+  else {
+    res.json({
+      error: 'Private route.'
+    })
+  }
+}
+
 function getQuotes(req, res) {
   Quote
     .query()
@@ -79,8 +90,8 @@ function deleteQuote(req, res) {
 
 apiRouter
   .get('/quotes', getQuotes)
-  .get('/quotes/:quoteId', getOneQuote)
-  .post('/quotes', createNewQuote)
+  .get('/quotes/:quoteId', isUserAuthenticated , getOneQuote)
+  .post('/quotes', isUserAuthenticated , createNewQuote)
   .put('/quotes/:quoteId', updateQuote)
   .delete('/quotes/:quoteId', deleteQuote)
 
