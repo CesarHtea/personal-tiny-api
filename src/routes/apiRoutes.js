@@ -1,5 +1,6 @@
 const Router = require('express').Router
 const Tweet = require('../models/Tweet')
+const Lists = require('../models/List')
 
 const apiRouter = Router()
 
@@ -55,12 +56,24 @@ function deleteTweet(req, res) {
     })
 }
 
+function allLists(req, res) {
+  Lists
+    .query()
+    .eager('tweets')
+    .then(function(data) {
+      res.json(data)
+    })
+}
+
 apiRouter
+
   .get('/tweets', allTweets)
   .get('/tweets/:tweetId', getSingleTweet)
   .post('/tweets', createNewTweet)
   .put('/tweets/:tweetId', updateTweet)
   .delete('/tweets/:tweetId', deleteTweet)
+
+  .get('/lists', allLists)
 
 
 module.exports = apiRouter
