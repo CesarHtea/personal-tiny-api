@@ -1,5 +1,6 @@
 const express = require('express')
 const { Model } = require('objection')
+const bodyParser = require('body-parser')
 
 const connectToDatabase = require('./src/database/connection')
 const knexFile = require('./knexfile')
@@ -11,6 +12,9 @@ const app = express()
 const appConnectionWithDatabase = connectToDatabase(knexFile.development)
 
 Model.knex(appConnectionWithDatabase)
+
+// para las peticiones (e.g. POST)
+app.use(bodyParser.json())
 
 app.get('/', function(req, res){
     res.send('home page')
